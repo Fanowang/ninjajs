@@ -1,0 +1,304 @@
+<html>
+
+<head></head>
+
+<body>
+    <div id="subTree">
+        <form>
+            <input type="text">
+        </form>
+        <p>Paragraph</p>
+        <span>Span</span>
+    </div>
+    <div id="box1">First Box</div>
+    <div id="box2">Second Box</div>
+    <script type="text/javascript">
+        //'use strict'
+        function assert(val1, val2) {
+            if (val1) {
+                console.log(val2);
+            }
+        }
+        function report(val) {
+            console.log(val);
+        }
+
+
+
+        /*      function skulk(ninja) {
+                 report(ninja + " skulking");
+             }
+             function report(message) {
+                 console.log(message);
+             }
+             skulk("Kuma");
+             skulk("Yoshi");
+     
+     
+             const firstConst = "samurai";
+             //firstConst("test");
+             console.log(firstConst);
+     
+             test1();
+             function test1() {
+                 console.log("test1");
+                 testfun();
+                 function testfun() {
+                     console.log("test2");
+                 }
+             }
+     
+             assert(typeof fun === "function", "We access the function.");
+             var fun = 3;
+             assert(typeof fun === "number", "Now we access the number");
+             function fun() { }
+             assert(typeof fun === "number", "still a number");
+             assert(typeof fun === "function", "still function");
+             function animateIt(elementId) {
+                 var elem = document.getElementById(elementId);
+                 var tick = 0;
+                 var timer = setInterval(function () {
+                     if (tick < 100) {
+                         elem.style.left = elem.style.top = tick + "px";
+                         tick++;
+                     }
+                     else {
+                         clearInterval(timer);
+                         assert(tick === 100,
+                             "Tick accessed via a closure.");
+                         assert(elem,
+                             "Element also accessed via a closure.");
+                         assert(timer,
+                             "Timer reference also obtained via a closure.");
+                     }
+                 }, 10);
+             }
+             //animateIt("box1");
+             //animateIt("box2");
+     
+     
+             function first(callback) {
+                 setTimeout(() => {
+                     console.log(1);
+                     callback();
+                 }, 500);
+             }
+             function second() {
+                 console.log(2);
+             }
+     
+             first(second);
+     
+             function* WeaponGenerator() {
+                 yield "Katana";
+                 yield "Wakizashi";
+                 yield "Kusarigama";
+             }
+             for (let weapon of WeaponGenerator()) {
+                 assert(weapon, weapon);
+             }
+     
+             function* IdGenerator() {
+                 let id = 0;
+                 while (true) {
+                     yield ++id;
+                 }
+             }
+     
+             const idIterator = IdGenerator();
+             const ninja1 = { id: idIterator.next().value };
+             const ninja2 = { id: idIterator.next().value };
+             const ninja3 = { id: idIterator.next().value };
+     
+             assert(ninja1.id === 1, "First ninja id = 1");
+             assert(ninja2.id === 2, "Second ninja id = 2");
+             assert(ninja3.id === 3, "Third ninja id = 3");
+     
+     
+             function* DomTraversal(element) {
+                 yield element;
+                 element = element.firstElementChild;
+                 while (element) {
+                     yield* DomTraversal(element);
+                     element = element.nextElementSibling;
+                 }
+             }
+     
+             const subTree = document.getElementById("subTree");
+             for (let element of DomTraversal(subTree)) {
+                 assert(element !== null, element.nodeName);
+             }
+     
+             function* NinjaGenerator(action) {
+                 const imposter = yield ("Hattori " + action);
+     
+                 assert(imposter === "Hanzo", "The generator has been infiltrated");
+     
+                 yield ("Yoshi (" + imposter + ") " + action);
+             }
+     
+             const ninjaIterator = NinjaGenerator("skulk");
+             const result1 = ninjaIterator.next();
+             assert(result1.value === "Hattori skulk", "Hattori is skulking");
+     
+             const result2 = ninjaIterator.next("Hanzo");
+             assert(result2.value === "Yoshi (Hanzo) skulk", "we have an imposter!");
+     
+     
+             
+             report("At code start");
+     
+             var ninjaDelayedPromise = new Promise((resolve, reject) => {
+                 report("ninjaDelayedPromise executor");
+                 setTimeout(() => {
+                     report("Resolving ninjaDelayedPromise");
+                     resolve("Hattori");
+                 }, 500);
+             });
+     
+             assert(ninjaDelayedPromise !== null, "After creating ninjaDelayedPromise");
+     
+             ninjaDelayedPromise.then(ninjade => {
+                 assert(ninjade === "Hattori", "ninjaDelayedPromise resolve handled with Hattori");
+             });
+     
+             const ninjaImmediatePromise = new Promise((resolve, reject) => {
+                 report("ninjaImmediatePromise executor. Immediate resolve");
+                 resolve("Yoshi");
+             });
+     
+             ninjaImmediatePromise.then(ninja => {
+                 assert(ninja === "Yoshi", "ninjaImmediatePromise resolve handled with Yoshi");
+             });
+     
+             report("At code end");
+     
+     
+     
+             const promise = new Promise((resolve, reject) => {
+                 reject("Explicitly reject a promise!");
+             });
+     
+             promise.then(
+                 () => fail("Happy path, won't be called!"),
+                 error => report("A promise was explicitly rejected!")
+             ); */
+
+        function getJSON(url) {
+            return new Promise((resolve, reject) => {
+                const request = new XMLHttpRequest();
+
+                //request.setRequestHeader("Access-Control-Allow-Origin", "true");
+
+                request.open("GET", url);
+
+                request.onload = function () {
+                    try {
+                        if (this.status === 200) {
+                            console.log(this.response);
+                            resolve(JSON.parse(this.response));
+                        }
+                        else {
+                            console.log("4");
+                            reject(this.status + " " + this.statusText);
+                        }
+                    } catch (e) {
+                        reject(e.message);
+                    }
+                };
+
+                request.onerror = () => {
+                    reject(this.status + " " + this.statusText);
+                };
+                request.send();
+            });
+
+
+        }
+
+        /*    getJSON("data/ninjas.json").then(ninja => {
+               assert(ninja !== null, "Ninjas obtained!");
+           }).catch(e => report("Shouldn't be here: " + e));
+   
+   
+   
+           Promise.race([getJSON("data/yoshi.json"),
+           getJSON("data/hattori.json"),
+           getJSON("data/hanzo.json")])
+               .then(ninja => {
+                   assert(ninja !== null, ninja.name + " responded first");
+               }).catch(error => report("Failure!")); */
+
+
+        /* async(function* () {
+            try {
+                const ninja = yield getJSON("data/ninjas.json");
+                const missions = yield getJSON(ninja[0].missionsUrl);
+                const missionDescription = yield getJSON(missions[0].detailsUrl);
+            }
+            catch (e) {
+                report("we cannot get it!");
+            }
+
+        });
+
+        function async(generator) {
+            var iterator = generator();
+            function handle(iteratorResult) {
+                const iteratorValue = iteratorResult.value;
+
+                if (iteratorValue instanceof Promise) {
+                    iteratorValue.then(res => handle(iterator.next(res)))
+                        .catch(err => iterator.throw(err));
+                }
+            }
+            try {
+                handle(iterator.next());
+            }
+            catch (e) {
+                iterator.throw(e);
+            }
+        } */
+
+
+        (async function () {
+            try {
+                const ninja = await getJSON("data/ninjas.json");
+                const missions = await getJSON(ninja[0].missionsUrl);
+
+                console.log(missions);
+            }
+            catch (e) {
+                console.log("Error: " + e);
+            }
+
+        })()
+
+
+        const yoshi = { skulk: true };
+        const hattori = { sneak: true };
+        const kuma = { creep: true };
+
+        assert("skulk" in yoshi, "Yoshi can skulk");
+        assert("sneak" in hattori, "Hattori can skulk");
+        assert("creep" in kuma, "Kuma can skulk");
+
+        Object.setPrototypeOf(yoshi, hattori);
+
+        assert("sneak" in yoshi, "Yoshi can skulk");
+        assert(!("creep" in hattori), "Hattori cannot creep");
+
+        Object.setPrototypeOf(hattori, kuma);
+
+        assert("creep" in yoshi, "Yoshi can creep");
+        assert("creep" in hattori, "Hattori can creep");
+
+
+
+
+    </script>
+
+
+</body>
+
+</html>
