@@ -261,40 +261,180 @@
         } */
 
 
-        (async function () {
-            try {
-                const ninja = await getJSON("data/ninjas.json");
-                const missions = await getJSON(ninja[0].missionsUrl);
+        /*  (async function () {
+             try {
+                 const ninja = await getJSON("data/ninjas.json");
+                 const missions = await getJSON(ninja[0].missionsUrl);
+ 
+                 console.log(missions);
+             }
+             catch (e) {
+                 console.log("Error: " + e);
+             }
+ 
+         })()
+ 
+ 
+         const yoshi = { skulk: true };
+         const hattori = { sneak: true };
+         const kuma = { creep: true };
+ 
+         assert("skulk" in yoshi, "Yoshi can skulk");
+         assert("sneak" in hattori, "Hattori can skulk");
+         assert("creep" in kuma, "Kuma can skulk");
+ 
+         Object.setPrototypeOf(yoshi, hattori);
+ 
+         assert("sneak" in yoshi, "Yoshi can skulk");
+         assert(!("creep" in hattori), "Hattori cannot creep");
+ 
+         Object.setPrototypeOf(hattori, kuma);
+ 
+         assert("creep" in yoshi, "Yoshi can creep");
+         assert("creep" in hattori, "Hattori can creep"); */
+        //----------------------------------
+        /*         function Ninja() {
+                    this.swung = true;
+                }
+                const ninja1 = new Ninja();
+        
+                Ninja.prototype.swingSword = function () {
+                    return this.swung;
+                }
+        
+                Ninja.prototype = {
+                    pierce: function () {
+                        return true;
+                    }
+                }
+                const ninja2 = new Ninja();
+        
+                assert(ninja1.swung,"swung is here");
+                assert(ninja1.swingSword(),"swingSword is here");
+                assert(ninja1.pierce,"pierce is here");
+                assert(ninja2.swung,"swung is here");
+                assert(ninja2.pierce(),"pierce 2 is here");
+                assert(ninja2.swingSword,"swingSword 2 is here");
+         */
 
-                console.log(missions);
+        //-------------------------------------
+
+        /*         function Ninja() { }
+                const ninja = new Ninja();
+        
+                assert(typeof ninja === "object",
+                    "The type of the instance is object.");
+        
+                assert(ninja instanceof Ninja,
+                    "instanceof identifies the constructor.");
+                assert(ninja.constructor === Ninja,
+                    "The ninja object was created by the Ninja function."); */
+        //-----------------
+
+        /*         function Person() { }
+                Person.prototype.dance = function () { }
+        
+                function Ninja() { }
+                Ninja.prototype = new Person();
+                const ninja = new Ninja();
+        
+                Person.prototype.jump = function () { return true; };
+                Person.prototype.drive = false;
+                assert(ninja instanceof Ninja, "ninja receives functionality from the Ninja prototype");
+                assert(ninja instanceof Person, "...and the Person");
+                assert(ninja instanceof Object, "... and the Object prototype");
+                assert(typeof ninja.dance === "function", "... and can dance!");
+                assert(ninja.jump(), "ninja got jump feature");
+                assert(!ninja.drive, "ninja doesn't know how to drive"); */
+
+        //--------------------
+
+        /*      var ninja = {};
+             ninja.name = "Yoshi";
+             ninja.weapon = "kusarigama";
+     
+             Object.defineProperty(ninja, "sneaky", {
+                 configurable: false,
+                 enumerable: false,
+                 value: true,
+                 writable: true
+             });
+     
+             assert("sneaky" in ninja, "we can access the new property");
+     
+             for (let prop in ninja) {
+                 assert(prop !== undefined, "An enumerated property: " + prop);
+             } */
+        //------------------------
+
+        /*         function Person() { }
+                Person.prototype.dance = function () { }
+        
+                function Ninja() { }
+                Ninja.prototype = new Person();
+        
+                Object.defineProperty(Ninja.prototype, "constructor", {
+                    enumerable: false,
+                    value: Ninja,
+                    writable: true
+                });
+        
+                var ninja = new Ninja();
+                assert(ninja.constructor === Ninja, "Connection from ninja instances to Ninja constructor reestablished!");
+                for (let prop in Ninja.prototype) {
+                    assert(prop === "dance", "The only enumerable property is dance!");
+                } */
+
+
+        //--------
+        /* class Ninja {
+            constructor(name) {
+                this.name = name;
             }
-            catch (e) {
-                console.log("Error: " + e);
+
+            swingSword() {
+                return true;
+            }
+        }
+
+        var ninja = new Ninja("Yoshi");
+        assert(ninja instanceof Ninja, "Our ninja is a Ninja");
+        assert(ninja.name === "Yoshi", "named Yoshi");
+        assert(ninja.swingSword(), "and he can swing a sword"); */
+
+        //-------------
+        class Person {
+            constructor(name) {
+                this.name = name;
+            }
+            dance() {
+                return true;
+            }
+        }
+
+        class Ninja extends Person {
+            constructor(name, weapon) {
+                super(name);
+                this.weapon = weapon;
             }
 
-        })()
+            wieldWeapon() {
+                return true;
+            }
+        }
+        var person = new Person("Bob");
+        assert(person instanceof Person, "A person's a person");
+        assert(person.dance(), "A person can dance.");
+        assert(person.name === "Bob", "We can call it by name.");
+        assert(!(person instanceof Ninja), "But it's not a Ninja");
+        assert(!("wieldWeapon" in person), "And it cannot wield a weapon");
 
-
-        const yoshi = { skulk: true };
-        const hattori = { sneak: true };
-        const kuma = { creep: true };
-
-        assert("skulk" in yoshi, "Yoshi can skulk");
-        assert("sneak" in hattori, "Hattori can skulk");
-        assert("creep" in kuma, "Kuma can skulk");
-
-        Object.setPrototypeOf(yoshi, hattori);
-
-        assert("sneak" in yoshi, "Yoshi can skulk");
-        assert(!("creep" in hattori), "Hattori cannot creep");
-
-        Object.setPrototypeOf(hattori, kuma);
-
-        assert("creep" in yoshi, "Yoshi can creep");
-        assert("creep" in hattori, "Hattori can creep");
-
-
-
+        var ninja = new Ninja("Yoshi", "Wakizashi");
+        assert(ninja instanceof Ninja, "A ninja's a ninja");
+        assert(ninja.wieldWeapon(), "That can wield a weapon");
+        assert(ninja instanceof Person, "But it's also a person");
+        assert(ninja.name === "Yoshi", "That has a name");
+        assert(ninja.dance(), "And enjoys dancing");
 
     </script>
 
