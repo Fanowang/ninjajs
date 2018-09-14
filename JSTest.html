@@ -403,7 +403,7 @@
         assert(ninja.swingSword(), "and he can swing a sword"); */
 
         //-------------
-        class Person {
+        /* class Person {
             constructor(name) {
                 this.name = name;
             }
@@ -434,7 +434,133 @@
         assert(ninja.wieldWeapon(), "That can wield a weapon");
         assert(ninja instanceof Person, "But it's also a person");
         assert(ninja.name === "Yoshi", "That has a name");
-        assert(ninja.dance(), "And enjoys dancing");
+        assert(ninja.dance(), "And enjoys dancing"); */
+        //------------------------
+
+        /*         const ninjaCollection = {
+                    ninjas: ["Yoshi", "Kuma", "Hattori"],
+        
+                    get firstNinja() {
+                        report("Get firstNinja!");
+                        return this.ninjas[0];
+                    },
+        
+                     set firstNinja(value) {
+                        report("Set firstNinja!");
+                        this.ninjas[0] = value; 
+                    }
+                }
+                assert(ninjaCollection.firstNinja === "Yoshi",
+                    "Yoshi is the first ninja");
+                ninjaCollection.firstNinja = "Hachi";
+                assert(ninjaCollection.firstNinja === "Hachi"
+                    && ninjaCollection.ninjas[0] === "Hachi",
+                    "Now Hachi is the first ninja"); */
+
+        /*    function Ninja() {
+               let _skillLevel = 0;
+   
+               Object.defineProperty(this, 'skillLevel', {
+                   get: () => {
+                       report("The get method is called");
+                       return _skillLevel;
+                   },
+   
+                   set: value => {
+                       if (!Number.isInteger(value)) {
+                           throw new TypeError("Skill level should be a number!");
+                       }
+                       report("The set method is called");
+                       _skillLevel = value;
+                   }
+               });
+           }
+   
+           const ninja = new Ninja();
+   
+           assert(typeof ninja._skillLevel === "undefined", "We cannot access a 'private' property");
+           assert(ninja._skillLevel === 0, "The getter works fine");
+           ninja.skillLevel = 10;
+           assert(ninja.skillLevel === 10, "The value was updated");
+   
+           try {
+               ninja.skillLevel = "Great";
+               fail("should not be here");
+           }
+           catch (e) {
+               report("Setting a non-integer value throws an exception" + e);
+           } */
+        //----------------------------
+
+        /*  const emperor = { name: "Komei" };
+         const representative = new Proxy(emperor, {
+             get: (target, key) => {
+                 report("Reading " + key + " through a proxy");
+                 return key in target ? target[key] : "Don't bother the emperor";
+             },
+             set: (target, key, value) => {
+                 report("Writing " + key + " through a proxy");
+                 target[key] = value;
+             }
+         });
+ 
+         assert(emperor.name === "Komei", "The emperor's name is Komei");
+         assert(representative.name = "Komei", "We can get the name property through a proxy");
+ 
+         assert(emperor.nickname === undefined, "The emperor doesn't have a nickname");
+ 
+         assert(representative.nickname === "Don't bother the emperor", "The proxy jump in when we make inproper requrests");
+ 
+         representative.nickname = "Tenno";
+         assert(emperor.nickname === "Tenno",
+             "The emperor now has a nickname");
+         assert(representative.nickname === "Tenno",
+             "The nickname is also accessible through the proxy"); */
+        //------------------
+        /* function makeLoggable(target) {
+            return new Proxy(target, {
+                get: (target, property) => {
+                    report("Reading " + property);
+                    return target[property];
+                },
+                set: (target, property, value) => {
+                    report("Writing value " + value + " to " + property);
+                    target[property] = value;
+                }
+            });
+        }
+
+        let ninja = { name: "Yoshi" };
+        ninja = makeLoggable(ninja);
+
+        assert(ninja.name === "Yoshi", "Our ninja Yoshi");
+        ninja.weapon = "sword"; */
+
+        //---------------------------------------
+        function isPrime(number) {
+            if (number < 2) {
+                return false;
+            }
+            for (let i = 2; i < number; i++) {
+                if (number % i === 0) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        isPrime = new Proxy(isPrime, {
+            apply: (target, thisArg, args) => {
+                console.time("isPrime");
+                const result = target.apply(thisArg, args);
+                console.timeEnd("isPrime");
+                return result;
+            }
+        });
+
+        isPrime(1299827);
+
 
     </script>
 
